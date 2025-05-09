@@ -32,7 +32,7 @@ def choose_interface(interfaces):
     print("\nAvailable interfaces:")
     for i, iface in enumerate(interfaces):
         print(f"{i}: {iface}")
-    choice = input("\n*Choose Ethernet for CAN to ETH converters*\nEnter the number of the interface to use: ")
+    choice = input("\n*Choose Ethernet for CAN to ETH converters*\nEnter the number(Left) of the interface to use: ")
     try:
         idx = int(choice)
         return interfaces[idx].split(".")[0]  # Interface ID (before the name)
