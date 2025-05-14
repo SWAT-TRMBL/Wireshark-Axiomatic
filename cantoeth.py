@@ -40,13 +40,21 @@ def choose_interface(interfaces):
         print("Invalid selection.")
         sys.exit(1)
 
-def get_mac_address():
-    mac = input("Enter a MAC address to filter (e.g., aa:bb:cc:dd:ee:ff): ").strip()
-    if len(mac.split(":")) != 6:
-        print("Invalid MAC address format.")
-        sys.exit(1)
-    return mac
+def format_mac_address(mac):
+    mac = mac.replace(":","").replace("-","")
+    if len(mac) != 12:
+        raise ValueError("MAC address must be 12 hexadecimal characters long")
+    formatted_mac = ':'.join(mac[i:i+2] for i in range(0,12,2))
+    return formatted_mac
 
+def get_mac_address():
+    mac = input("Enter a MAC address to filter (e.g., aa:bb:cc:dd:ee:ff or aa-bb-cc-dd-ee-ff or aabbccddeeff): ").strip()
+    try:
+        formatted_mac = format_mac_address(mac)
+        print("MAC address entered:",formatted_mac)
+    except ValueError as e:
+        print(e)
+        
 def ensure_capture_dir():
     if not os.path.isdir(CAPTURE_DIR):
         os.makedirs(CAPTURE_DIR)
