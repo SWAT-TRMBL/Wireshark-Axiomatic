@@ -55,6 +55,8 @@ def get_mac_address():
     except ValueError as e:
         print(e)
         
+    return formatted_mac
+        
 def ensure_capture_dir():
     if not os.path.isdir(CAPTURE_DIR):
         os.makedirs(CAPTURE_DIR)
