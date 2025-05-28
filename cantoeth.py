@@ -9,7 +9,6 @@ import time
 # unless a custom installation was performed for wireshark
 WIRESHARK_PATH = r"C:\Program Files\Wireshark\Wireshark.exe"
 #CAPTURE_DIR = os.path.join(os.getcwd(), "captures")
-# Test Commit comment
 
 def check_wireshark_installation():
     if not os.path.isfile(WIRESHARK_PATH):
