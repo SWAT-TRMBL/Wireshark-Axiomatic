@@ -8,7 +8,7 @@ import time
 # should be the same for all windows machines 
 # unless a custom installation was performed for wireshark
 WIRESHARK_PATH = r"C:\Program Files\Wireshark\Wireshark.exe"
-CAPTURE_DIR = os.path.join(os.getcwd(), "captures")
+#CAPTURE_DIR = os.path.join(os.getcwd(), "captures")
 
 def check_wireshark_installation():
     if not os.path.isfile(WIRESHARK_PATH):
@@ -31,10 +31,10 @@ def list_available_interfaces():
 def choose_interface(interfaces):
     print("\nAvailable interfaces:")
     for i, iface in enumerate(interfaces):
-        print(f"{i}: {iface}")
+        print(f"{iface}")
     choice = input("\n*Choose Ethernet for CAN to ETH converters*\nEnter the number(Left) of the interface to use: ")
     try:
-        idx = int(choice)
+        idx = int(choice)-1
         return interfaces[idx].split(".")[0]  # Interface ID (before the name)
     except (ValueError, IndexError):
         print("Invalid selection.")
@@ -56,8 +56,9 @@ def get_mac_address():
         print(e)
         
     return formatted_mac
-        
-def ensure_capture_dir():
+
+# Removing file capture to avoid directory creation issues on end user machines        
+"""def ensure_capture_dir():
     if not os.path.isdir(CAPTURE_DIR):
         os.makedirs(CAPTURE_DIR)
 
@@ -65,28 +66,28 @@ def get_capture_filename(mac):
     timestamp = time.strftime("%Y%m%d-%H%M%S")
     sanitized_mac = mac.replace(":", "").lower()
     return os.path.join(CAPTURE_DIR, f"capture_{sanitized_mac}_{timestamp}.pcapng")
-
+"""
 def main():
     check_wireshark_installation()
-    ensure_capture_dir()
+    #ensure_capture_dir()
 
     interfaces = list_available_interfaces()
     interface_id = choose_interface(interfaces)
     mac = get_mac_address()
     display_filter = f"arp && eth.src == {mac}"
-    capture_file = get_capture_filename(mac)
+    #capture_file = get_capture_filename(mac)
 
     print("\nLaunching Wireshark with:")
     print(f"  Interface: {interface_id}")
     print(f"  Filter: {display_filter}")
-    print(f"  Output file: {capture_file}\n")
+    #print(f"  Output file: {capture_file}\n")
 
     subprocess.run([
         WIRESHARK_PATH,
         "-i", interface_id,
         "-k",  # start capturing immediately
-        "-Y", display_filter,
-        "-w", capture_file  # write to capture file
+        "-Y", display_filter
+        #"-w", capture_file  # write to capture file
     ])
 
 if __name__ == "__main__":
